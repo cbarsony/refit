@@ -65,8 +65,15 @@ var calendar = React.createClass({
 		});
 	},
 	getInitialState: function(){
+		var self = this;
+		daysRef.once("value", function(data){
+			var x = data.val();
+			self.setState({
+				days: data.val()
+			});
+		});
 		return {
-			days: days
+			days: []
 		};
 	},
 	render: function(){
@@ -86,12 +93,15 @@ var calendar = React.createClass({
 	}
 });
 
-var days = [
+var daysRef = new Firebase("https://shining-torch-1499.firebaseio.com/react/days");
+var daysNumber = 5;
+
+/*var days = [
 	{ id: 1, comment: "this is day 1" },
 	{ id: 2, comment: "" },
 	{ id: 3, comment: "" },
 	{ id: 4, comment: "and this is day 4" },
 	{ id: 5, comment: "" }
-];
+];*/
 
 React.renderComponent(calendar(), document.body);
