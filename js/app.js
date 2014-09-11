@@ -78,18 +78,39 @@ var calendar = React.createClass({
 	},
 	render: function(){
 		var calendarDays = [];
-		_.each(this.state.days, function(calendarDay){
-			calendarDays.push(day({
-				day: calendarDay,
-				addDay: this.dayAdded,
-				updateDay: this.dayUpdated,
-				removeDay: this.dayRemoved
-			}));
-		}, this);
+		for(var i = 0, l = this.props.daysNumber; i < l; i++){
+			calendarDays.push(day({ day: { id: i, comment: "comment " + i } }));
+		}
 		return React.DOM.div(
 			{ className: "calendar" },
-			calendarDays
+			React.DOM.div(null, calendarDays)
 		);
+	}
+});
+
+var page = React.createClass({
+	displayName: "page",
+	selectChanged: function(e){
+		this.setState({
+			daysNumber: e.target.value
+		});
+	},
+	getInitialState: function(){
+		return {
+			daysNumber: 4
+		};
+	},
+	render: function(){
+		return React.DOM.div(
+			null,
+			React.DOM.select(
+				{ onChange: this.selectChanged },
+				React.DOM.option({ value: "4" }, "4"),
+				React.DOM.option({ value: "5" }, "5"),
+				React.DOM.option({ value: "6" }, "6")
+			),
+			calendar({ daysNumber: this.state.daysNumber })
+		)
 	}
 });
 
@@ -104,4 +125,4 @@ var daysNumber = 5;
 	{ id: 5, comment: "" }
 ];*/
 
-React.renderComponent(calendar(), document.body);
+React.renderComponent(page(), document.body);
